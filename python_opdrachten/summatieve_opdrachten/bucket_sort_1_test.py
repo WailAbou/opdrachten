@@ -7,7 +7,7 @@ import unittest
 class TestNotebook(unittest.TestCase):
     
     def test_sort_real_numbers(self):
-        temp_list = list(map(lambda x: round(x, 10), np.random.uniform(low=0.5, high=100.005, size=(100000,))))
+        temp_list = list(map(lambda x: round(x, 10), np.random.uniform(low=-100.005, high=100.005, size=(100000,))))
         test_list, test_list[:] = [], temp_list
         temp_list.sort(), bucket_sort(test_list)
         self.assertEqual(test_list, temp_list)
