@@ -13,22 +13,16 @@ class TestNotebook(unittest.TestCase):
         self.assertEqual(test_list, temp_list)
 
     def test_sort_natural_numbers(self):
-        temp_list = random.sample(range(-100000, 100000), 100000)
+        temp_list = random.sample(range(0, 100000), 500)
         test_list, test_list[:] = [], temp_list
         temp_list.sort(), bucket_sort(test_list)
         self.assertEqual(test_list, temp_list)
 
-    def test_sort_negatives(self):
-        temp_list = random.sample(range(-200000, 0), 100000)
-        test_list, test_list[:] = [], temp_list
-        temp_list.sort(), bucket_sort(test_list)
-        self.assertEqual(test_list, temp_list)
-
-    def test_sort_positives(self):
-        temp_list = random.sample(range(0, 200000), 100000)
+    def test_sort_mix_numbers(self):
+        temp_list = random.sample(range(0, 100000), 50000) + list(map(lambda x: round(x, 3), np.random.uniform(low=0.005, high=100.005, size=(50000,))))
         test_list, test_list[:] = [], temp_list
         temp_list.sort(), bucket_sort(test_list)
         self.assertEqual(test_list, temp_list)
         
 
-unittest.main(argv=[''], verbosity=2, exit=False)
+unittest.main(argv=[''], verbosity=2)
