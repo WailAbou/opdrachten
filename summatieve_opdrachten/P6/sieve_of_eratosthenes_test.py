@@ -1,28 +1,22 @@
-import unittest
-import sympy
 from sieve_of_eratosthenes import sieve
-import time
+from mpi4py import MPI
+from sympy import primerange
+
+comm = MPI.COMM_WORLD
+rank = comm.Get_rank()
+size = comm.Get_size()
+
+def test_primes(n):
+    start_time = MPI.Wtime()
+    primes = sieve(n, rank, size, comm)
+    end_time = MPI.Wtime()
+
+    if rank == 0:
+        print(f"\nSuccefully found the primes of {n} numbers = {primes == list(primerange(0, n + 1))}")
+        print(f"Total elapsed time: {end_time - start_time}")
 
 
-class TestSieve(unittest.TestCase):
-    
-    def compare_primes(self, N):
-        start = time.time()
-        my_primes = sieve(N)
-        end = time.time()
-        print(f'\nIt takes {end - start:.2f} seconds to find the primes of {N} elements.')
-
-        other_primes = list(sympy.primerange(0, N))
-        self.assertEqual(my_primes, other_primes)
-
-    # def test_100_000(self):
-        # self.compare_primes(100_000)
-
-    # def test_1_000_000(self):
-    #     self.compare_primes(1_000_000)
-
-    def test_10_000_000(self):
-        self.compare_primes(10_000_000)
-
-
-unittest.main(argv=[''], verbosity=2)
+test_primes(100)
+test_primes(1_000)
+test_primes(100_000)
+test_primes(1_000_000)
