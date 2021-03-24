@@ -1,11 +1,13 @@
 import numpy as np
+import math
 
 
 BLOCK_LOW = lambda rank, size, n: (rank * n) // size
 BLOCK_HIGH = lambda rank, size, n: BLOCK_LOW(rank + 1, size, n)
 BLOCK_SIZE = lambda rank, size, n: BLOCK_LOW(rank + 1, size, n) - BLOCK_LOW(rank, size, n)
 
-def sieve(n, rank, size, comm):
+
+def sieve_parallel(n, rank, size, comm):
     low_value = 2 + BLOCK_LOW(rank, size, n - 1)
     high_value = 2 + BLOCK_HIGH(rank, size, n - 1)
     block_size = BLOCK_SIZE(rank, size, n - 1)
@@ -28,7 +30,7 @@ def sieve(n, rank, size, comm):
             index += 1
 
         prime = comm.bcast(prime)
-        primes = list(filter(lambda x: x != -1, marked))
-
+    
+    primes = list(filter(lambda x: x != -1, marked))
     primes = comm.reduce(primes)
     return primes
